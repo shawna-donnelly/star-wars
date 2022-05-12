@@ -23,6 +23,7 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {useQuery, gql} from '@apollo/client';
 
 import {AllPeopleQueryResult} from './__generated__/graphql';
+import {Icon} from '@rneui/base';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -75,7 +76,8 @@ const App = () => {
                 <ListItem.Title>{edge?.node?.name}</ListItem.Title>
               </ListItem.Content>
             </ListItem>
-          )}></FlatList>
+          )}
+        />
       </View>
     </SafeAreaView>
   );
