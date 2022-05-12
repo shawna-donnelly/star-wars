@@ -14,16 +14,13 @@ import {
   StatusBar,
   StyleSheet,
   useColorScheme,
-  View,
-  TouchableHighlight,
-  FlatList,
 } from 'react-native';
-import {Header, ListItem} from '@rneui/themed';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {useQuery, gql} from '@apollo/client';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {AllPeopleQueryResult} from './__generated__/graphql';
-import {Icon} from '@rneui/base';
+import {NavigationContainer} from '@react-navigation/native';
+import {HomeScreen} from './screens/Home/HomeScreen';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -32,53 +29,16 @@ const App = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  const {data, loading}: AllPeopleQueryResult = useQuery(gql`
-    {
-      allPeople {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-    }
-  `);
+  const Stack = createNativeStackNavigator();
 
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <Header
-        backgroundImageStyle={{}}
-        barStyle="default"
-        centerComponent={{
-          text: 'IH Challenge',
-          style: {color: '#fff'},
-        }}
-        centerContainerStyle={{}}
-        leftComponent={{icon: 'menu', color: '#fff'}}
-        leftContainerStyle={{}}
-        linearGradientProps={{}}
-        placement="center"
-        rightComponent={{icon: 'home', color: '#fff'}}
-        rightContainerStyle={{}}
-        statusBarProps={{}}
-      />
-      <View
-        style={{
-          backgroundColor: isDarkMode ? Colors.black : Colors.white,
-        }}>
-        <FlatList
-          data={data?.allPeople?.edges}
-          renderItem={({item: edge}) => (
-            <ListItem Component={TouchableHighlight} key={edge?.node?.id}>
-              <ListItem.Content>
-                <ListItem.Title>{edge?.node?.name}</ListItem.Title>
-              </ListItem.Content>
-            </ListItem>
-          )}
-        />
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={HomeScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </SafeAreaView>
   );
 };
