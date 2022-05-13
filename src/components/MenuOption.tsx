@@ -1,21 +1,24 @@
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react';
+import { textColor } from '../screens/Home/HomeScreen';
 
-export default function MenuOption(props: { textColor: string; title: string; img?: Element; onPress: () => void }) {
-    const { textColor, title, img, onPress } = props;
+export default function MenuOption(props: { title: string; img?: JSX.Element; onPress: () => void }) {
+    const { title, img, onPress } = props;
 
     return (
-        <TouchableOpacity
-            style={{
-                flexShrink: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}
-            onPress={onPress}
-        >
+        <TouchableOpacity style={styles.container} onPress={onPress}>
             {img}
-            <Text style={{ fontSize: 30, color: textColor }}>{title}</Text>
+            <Text style={styles.text}>{title}</Text>
         </TouchableOpacity>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flexShrink: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    text: { fontSize: 30, color: textColor },
+});

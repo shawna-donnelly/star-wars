@@ -35,6 +35,7 @@ export const PersonDetail = () => {
                 }           
                 vehicleConnection {
                   vehicles {
+                    id
                     name
                   }
                 }

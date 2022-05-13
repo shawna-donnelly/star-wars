@@ -1,4 +1,4 @@
-import { Text, Image, ScrollView } from 'react-native';
+import { Text, Image, ScrollView, StyleSheet } from 'react-native';
 import React from 'react';
 import MenuOption from '../../components/MenuOption';
 import { useNavigation } from '@react-navigation/native';
@@ -24,9 +24,9 @@ export const HomeScreen = () => {
 
     return (
         <SafeAreaView style={globalStyles.globalFlatListContainer}>
-            <Text style={{ fontSize: 36, textAlign: 'center', color: textColor }}>Star Wars</Text>
+            <Text style={styles.mainTitle}>Star Wars</Text>
 
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView style={styles.container}>
                 <>
                     <MenuOption
                         img={
@@ -40,14 +40,13 @@ export const HomeScreen = () => {
                             />
                         }
                         title="Planets"
-                        textColor={textColor}
                         onPress={() => navigation.navigate('PlanetsHome')}
                     />
                     <LightSaberSeparator />
                     <MenuOption
                         img={
                             <Image
-                                style={{ flexShrink: 1, backgroundColor: 'black' }}
+                                style={styles.item}
                                 source={require(shipFilePath)}
                                 height={150}
                                 width={150}
@@ -56,14 +55,13 @@ export const HomeScreen = () => {
                             />
                         }
                         title="Ships"
-                        textColor={textColor}
                         onPress={() => navigation.navigate('ShipsHome')}
                     />
                     <LightSaberSeparator />
                     <MenuOption
                         img={
                             <Image
-                                style={{ flexShrink: 1, backgroundColor: 'black' }}
+                                style={styles.item}
                                 source={require(peopleFilePath)}
                                 height={150}
                                 width={150}
@@ -72,14 +70,13 @@ export const HomeScreen = () => {
                             />
                         }
                         title="People"
-                        textColor={textColor}
                         onPress={() => navigation.navigate('PeopleHome')}
                     />
                     <LightSaberSeparator />
                     <MenuOption
                         img={
                             <Image
-                                style={{ flexShrink: 1, backgroundColor: 'black' }}
+                                style={styles.item}
                                 source={require(filmFilePath)}
                                 height={150}
                                 width={150}
@@ -88,7 +85,6 @@ export const HomeScreen = () => {
                             />
                         }
                         title="Films"
-                        textColor={textColor}
                         onPress={() => navigation.navigate('FilmsHome')}
                     />
                 </>
@@ -96,3 +92,8 @@ export const HomeScreen = () => {
         </SafeAreaView>
     );
 };
+const styles = StyleSheet.create({
+    mainTitle: { fontSize: 36, textAlign: 'center', color: textColor },
+    container: { flex: 1 },
+    item: { flexShrink: 1, backgroundColor: 'black' },
+});
