@@ -4,6 +4,7 @@ import MenuOption from '../../components/MenuOption';
 import { useNavigation } from '@react-navigation/native';
 import { LightSaberSeparator } from '../../components/LightSaberSeparator';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export const textColor = '#e0d6d6';
 const planetFilePath = '../../../assets/images/tatooine.png';
@@ -11,7 +12,7 @@ const shipFilePath = '../../../assets/images/falcon.png';
 const peopleFilePath = '../../../assets/images/jabba.png';
 const filmFilePath = '../../../assets/images/georgeLucas.png';
 export const HomeScreen = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<NativeStackNavigationProp<any, any>>();
 
     React.useLayoutEffect(() => {
         navigation.setOptions({

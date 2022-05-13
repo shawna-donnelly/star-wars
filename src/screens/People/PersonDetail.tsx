@@ -1,25 +1,17 @@
-import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import {
-    Film,
-    Node,
-    PeopleConnection,
-    Person,
-    Planet,
-    RootPersonArgs,
-    Starship,
-    Vehicle,
-} from '../../__generated__/graphql';
-import { gql, QueryResult, useQuery } from '@apollo/client';
-import reactotron from 'reactotron-react-native';
+import { Film, Person, Starship, Vehicle } from '../../__generated__/graphql';
+import { gql, useQuery } from '@apollo/client';
 import { textColor } from '../Home/HomeScreen';
 import { LightSaberSeparator } from '../../components/LightSaberSeparator';
 import { DataItem } from '../../components/DataItem';
-import { Type } from 'typescript';
+import { globalStyles } from '../../utils/genericStyles';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { FilmMapper, StarshipMapper, VehicleMapper } from '../../components/Mappers';
 
 export const PersonDetail = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<NativeStackNavigationProp<any, any>>();
     const route = useRoute();
     let { id } = route.params;
 
@@ -56,8 +48,8 @@ export const PersonDetail = () => {
                 }
                 starshipConnection{
                   starships{
+                    id
                     name
-                    starshipClass
                   }
                 }
               }
@@ -66,7 +58,7 @@ export const PersonDetail = () => {
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
-            title: data?.person?.name,
+            title: data?.person?.name || '',
             headerStyle: { backgroundColor: 'black' },
             headerTitleStyle: { color: textColor },
         });
@@ -85,87 +77,38 @@ export const PersonDetail = () => {
     }, [person]);
 
     return (
-        <ScrollView style={{ flex: 1, backgroundColor: 'black' }}>
+        <ScrollView style={globalStyles.globalScrollView} contentContainerStyle={globalStyles.globalScrollViewContent}>
             {loading && <ActivityIndicator color={textColor} />}
             {data && (
                 <>
-                    <View style={{ flexShrink: 1 }}>
-                        <Text
-                            style={[
-                                styles.titleText,
-                                {
-                                    fontWeight: 'bold',
-                                },
-                            ]}
-                        >
-                            General Information
-                        </Text>
+                    <View style={globalStyles.generalDataView}>
+                        <Text style={globalStyles.boldTitleText}>General Information</Text>
                         <DataItem title="Name:" value={data.person?.name || ''} />
                         <DataItem title="Birth Year:" value={data.person?.birthYear || ''} />
                         <DataItem title="Gender:" value={data.person?.gender || ''} />
                         <DataItem title="Mass:" value={data.person?.mass?.toString() || ''} />
                     </View>
-                    <Text style={{ fontSize: 10, color: textColor, fontStyle: 'italic', fontWeight: '300' }}>
-                        Click on the items below to see more details
-                    </Text>
+                    <Text style={globalStyles.disclaimerText}>Click on the items below to see more details</Text>
                     <TouchableOpacity
-                        style={{ flexShrink: 1 }}
+                        style={globalStyles.generalDataView}
                         onPress={() => navigation.navigate('PlanetDetail', { id: data?.person?.homeworld?.id })}
                     >
                         <DataItem title="Homeworld:" value={data.person?.homeworld?.name || ''} />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={{ flexShrink: 1 }}
+                        style={globalStyles.generalDataView}
                         onPress={() => navigation.navigate('SpeciesDetail', { id: data?.person?.species?.id })}
                     >
                         <DataItem title="Species:" value={data.person?.species?.name || 'Unknown'} />
                     </TouchableOpacity>
                     <LightSaberSeparator />
-                    <Text style={[styles.titleText, { fontWeight: 'bold' }]}>Associated Vehicles</Text>
-                    {vehicles?.map((vehicle: Vehicle) => {
-                        return (
-                            <TouchableOpacity
-                                style={{ flexShrink: 1 }}
-                                onPress={() => navigation.navigate('VehicleDetail', { id: vehicle.id })}
-                            >
-                                <DataItem title="-" value={vehicle.name || ''} />
-                            </TouchableOpacity>
-                        );
-                    })}
-                    {vehicles?.length === 0 && <DataItem title="" value="No Vehicles" />}
+                    <VehicleMapper data={vehicles} />
                     <LightSaberSeparator />
-                    <Text style={[styles.titleText, { fontWeight: 'bold' }]}>Associated Films</Text>
-                    {films?.map((film: Film) => {
-                        return (
-                            <TouchableOpacity
-                                style={{ flexShrink: 1 }}
-                                onPress={() => navigation.navigate('FilmDetail', { id: film.id })}
-                            >
-                                <DataItem title="-" value={film.title || ''} />
-                            </TouchableOpacity>
-                        );
-                    })}
-                    {films?.length === 0 && <DataItem title="" value="No Films" />}
+                    <FilmMapper data={films} />
                     <LightSaberSeparator />
-
-                    <Text style={[styles.titleText, { fontWeight: 'bold' }]}>Associated Starships</Text>
-                    {starships?.map((starship: Starship) => {
-                        return (
-                            <TouchableOpacity
-                                style={{ flexShrink: 1 }}
-                                onPress={() => navigation.navigate('StarshipDetail', { id: starship.id })}
-                            >
-                                <DataItem title="-" value={starship.name || ''} />
-                            </TouchableOpacity>
-                        );
-                    })}
-                    {starships?.length === 0 && <DataItem title="" value="No Starships" />}
+                    <StarshipMapper data={starships} />
                 </>
             )}
         </ScrollView>
     );
 };
-
-const styles = StyleSheet.create({
-    titleText: { color: textColor, margin: 5, fontSize: 16 },
-});

@@ -1,5 +1,6 @@
 import { Image } from 'react-native';
 import React from 'react';
+import { globalStyles } from '../utils/genericStyles';
 
 export const LightSaberSeparator = (props: { width?: number; height?: number }) => {
     const width = props.width ? props.width : 400;
@@ -7,7 +8,7 @@ export const LightSaberSeparator = (props: { width?: number; height?: number }) 
 
     return (
         <Image
-            style={{ flexShrink: 1 }}
+            style={globalStyles.generalDataView}
             source={require('../../assets/images/greenlightsbr.png')}
             width={width}
             height={height}

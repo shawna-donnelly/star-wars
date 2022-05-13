@@ -7,9 +7,10 @@ import { ListItem } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
 import { textColor } from '../Home/HomeScreen';
 import { LightSaberSeparator } from '../../components/LightSaberSeparator';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export const PeopleHomeScreen = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<NativeStackNavigationProp<any, any>>();
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
