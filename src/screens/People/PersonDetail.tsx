@@ -94,6 +94,7 @@ export const PersonDetail = () => {
                         <DataItem title="Birth Year:" value={person?.birthYear || ''} />
                         <DataItem title="Gender:" value={person?.gender || ''} />
                         <DataItem title="Mass:" value={person?.mass?.toString() || ''} />
+                        <DataItem title="Species:" value={data.person?.species?.name || 'Unknown'} />
                     </View>
                     <Text style={globalStyles.disclaimerText}>Click on the items below to see more details</Text>
                     <TouchableOpacity
@@ -101,12 +102,6 @@ export const PersonDetail = () => {
                         onPress={() => navigation.navigate('PlanetDetail', { id: person?.homeworld?.id || '' })}
                     >
                         <DataItem title="Homeworld:" value={data.person?.homeworld?.name || ''} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={globalStyles.generalDataView}
-                        onPress={() => navigation.navigate('SpeciesDetail', { id: data?.person?.species?.id })}
-                    >
-                        <DataItem title="Species:" value={data.person?.species?.name || 'Unknown'} />
                     </TouchableOpacity>
                     <LightSaberSeparator />
                     <VehicleMapper data={vehicles} />
