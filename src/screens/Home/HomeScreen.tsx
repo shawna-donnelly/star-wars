@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView } from 'react-native';
+import { Text, Image, ScrollView } from 'react-native';
 import React from 'react';
 import MenuOption from '../../components/MenuOption';
 import { useNavigation } from '@react-navigation/native';
@@ -10,9 +10,14 @@ const planetFilePath = '../../../assets/images/tatooine.png';
 const shipFilePath = '../../../assets/images/falcon.png';
 const peopleFilePath = '../../../assets/images/jabba.png';
 const filmFilePath = '../../../assets/images/georgeLucas.png';
-const lightsbrPath = '../../../assets/images/greenlightsbr.png';
 export const HomeScreen = () => {
     const navigation = useNavigation();
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            header: () => null,
+        });
+    }, [navigation]);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
