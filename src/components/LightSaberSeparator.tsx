@@ -3,7 +3,7 @@ import React from 'react';
 import { globalStyles } from '../utils/genericStyles';
 
 export const LightSaberSeparator = (props: { width?: number; height?: number }) => {
-    const width = props.width ? props.width : 400;
+    const width = props.width ? props.width : '100%';
     const height = props.height ? props.height : 50;
 
     return (

@@ -6,6 +6,8 @@ import { LightSaberSeparator } from '../../components/LightSaberSeparator';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { globalStyles, textColor } from '../../utils/genericStyles';
+import { hum } from '../../App';
+import reactotron from 'reactotron-react-native';
 
 const planetFilePath = '../../../assets/images/tatooine.png';
 const shipFilePath = '../../../assets/images/falcon.png';
@@ -20,6 +22,19 @@ export const HomeScreen = () => {
             header: () => null,
         });
     }, [navigation]);
+
+    const playSound = () => {
+        hum.setNumberOfLoops(0);
+        hum.setVolume(0.25);
+
+        hum.play(success => {
+            if (success) {
+                reactotron.log!('Successfully played the sound');
+            } else {
+                reactotron.log!('Playback failed due to audio decoding errors');
+            }
+        });
+    };
 
     return (
         <SafeAreaView style={globalStyles.globalFlatListContainer}>
@@ -39,7 +54,10 @@ export const HomeScreen = () => {
                             />
                         }
                         title="Planets"
-                        onPress={() => navigation.navigate('PlanetsHome')}
+                        onPress={() => {
+                            playSound();
+                            navigation.navigate('PlanetsHome');
+                        }}
                     />
                     <LightSaberSeparator />
                     <MenuOption
@@ -54,7 +72,10 @@ export const HomeScreen = () => {
                             />
                         }
                         title="Ships"
-                        onPress={() => navigation.navigate('ShipsHome')}
+                        onPress={() => {
+                            playSound();
+                            navigation.navigate('ShipsHome');
+                        }}
                     />
                     <LightSaberSeparator />
                     <MenuOption
@@ -69,7 +90,10 @@ export const HomeScreen = () => {
                             />
                         }
                         title="People"
-                        onPress={() => navigation.navigate('PeopleHome')}
+                        onPress={() => {
+                            playSound();
+                            navigation.navigate('PeopleHome');
+                        }}
                     />
                     <LightSaberSeparator />
                     <MenuOption
@@ -84,7 +108,10 @@ export const HomeScreen = () => {
                             />
                         }
                         title="Films"
-                        onPress={() => navigation.navigate('FilmsHome')}
+                        onPress={() => {
+                            playSound();
+                            navigation.navigate('FilmsHome');
+                        }}
                     />
                 </>
             </ScrollView>
