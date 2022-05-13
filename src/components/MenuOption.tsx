@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react';
-import { textColor } from '../screens/Home/HomeScreen';
+import { textColor } from '../utils/genericStyles';
 
 export default function MenuOption(props: { title: string; img?: JSX.Element; onPress: () => void }) {
     const { title, img, onPress } = props;

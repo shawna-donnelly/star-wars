@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { textColor } from '../screens/Home/HomeScreen';
+
+export const textColor = '#e0d6d6';
 
 export const globalStyles = StyleSheet.create({
     globalScrollView: {

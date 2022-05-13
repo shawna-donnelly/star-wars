@@ -5,10 +5,9 @@ import { gql, useQuery } from '@apollo/client';
 import { StarshipsConnection } from '../../__generated__/graphql';
 import { ListItem } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
-import { textColor } from '../Home/HomeScreen';
 import { LightSaberSeparator } from '../../components/LightSaberSeparator';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { globalStyles } from '../../utils/genericStyles';
+import { globalStyles, textColor } from '../../utils/genericStyles';
 
 export const ShipsHomeScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<any, any>>();
