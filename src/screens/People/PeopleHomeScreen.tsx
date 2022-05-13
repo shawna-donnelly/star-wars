@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { textColor } from '../Home/HomeScreen';
 import { LightSaberSeparator } from '../../components/LightSaberSeparator';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { globalStyles } from '../../utils/genericStyles';
 
 export const PeopleHomeScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<any, any>>();
@@ -34,25 +35,16 @@ export const PeopleHomeScreen = () => {
     `);
 
     return (
-        <View
-            style={{
-                flex: 1,
-                backgroundColor: 'black',
-            }}
-        >
+        <View style={globalStyles.globalFlatListContainer}>
             {loading && <ActivityIndicator />}
             {data && (
-                <View style={{ flex: 1, backgroundColor: 'black' }}>
+                <View style={globalStyles.globalFlatListContainer}>
                     <FlatList
                         data={data?.allPeople?.edges}
                         renderItem={({ item: edge }) => (
                             <>
                                 <ListItem
-                                    containerStyle={{
-                                        backgroundColor: 'black',
-                                        //borderBottomWidth: StyleSheet.hairlineWidth,
-                                        //borderBottomColor: textColor,
-                                    }}
+                                    containerStyle={globalStyles.globalFlatListContainer}
                                     Component={TouchableHighlight}
                                     key={edge?.node?.id}
                                     onPress={() => navigation.navigate('PersonDetail', { id: edge?.node?.id })}

@@ -1,7 +1,7 @@
-import { View, Text, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { Film, Person, Starship } from '../../__generated__/graphql';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { Film, Maybe, Person, Starship } from '../../__generated__/graphql';
 import { gql, useQuery } from '@apollo/client';
 import { textColor } from '../Home/HomeScreen';
 import { LightSaberSeparator } from '../../components/LightSaberSeparator';
@@ -9,14 +9,15 @@ import { DataItem } from '../../components/DataItem';
 import { globalStyles } from '../../utils/genericStyles';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FilmMapper, PersonMapper } from '../../components/Mappers';
+import { RootStackParamList } from '../../navigation/Navigation';
 
 export const StarshipDetail = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<any, any>>();
-    const route = useRoute();
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'StarshipDetail'>>();
+    const route = useRoute<RouteProp<RootStackParamList, 'StarshipDetail'>>();
     let { id } = route.params;
 
-    const [films, setFilms] = useState([] as Film[]);
-    const [pilots, setPilots] = useState([] as Person[]);
+    const [films, setFilms] = useState([] as Maybe<Film>[]);
+    const [pilots, setPilots] = useState([] as Maybe<Person>[]);
 
     const [starship, setStarship] = useState(undefined as unknown as Starship);
 
@@ -45,7 +46,7 @@ export const StarshipDetail = () => {
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
-            title: data?.starship?.name,
+            title: data?.starship?.name || '',
             headerStyle: { backgroundColor: 'black' },
             headerTitleStyle: { color: textColor },
         });
@@ -58,8 +59,12 @@ export const StarshipDetail = () => {
     }, [data]);
 
     useEffect(() => {
-        setPilots(starship?.pilotConnection?.pilots);
-        setFilms(starship?.filmConnection?.films);
+        if (starship?.pilotConnection?.pilots) {
+            setPilots(starship?.pilotConnection?.pilots);
+        }
+        if (starship?.filmConnection?.films) {
+            setFilms(starship?.filmConnection?.films);
+        }
     }, [starship]);
 
     return (

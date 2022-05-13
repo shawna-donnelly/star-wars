@@ -1,7 +1,7 @@
-import { View, Text, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { Film, Person, Planet, Starship, Vehicle } from '../../__generated__/graphql';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { Film, Maybe, Person, Planet, Starship, Vehicle } from '../../__generated__/graphql';
 import { gql, useQuery } from '@apollo/client';
 import { textColor } from '../Home/HomeScreen';
 import { LightSaberSeparator } from '../../components/LightSaberSeparator';
@@ -9,16 +9,17 @@ import { DataItem } from '../../components/DataItem';
 import { globalStyles } from '../../utils/genericStyles';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { PersonMapper, PlanetMapper, StarshipMapper, VehicleMapper } from '../../components/Mappers';
+import { RootStackParamList } from '../../navigation/Navigation';
 
 export const FilmDetail = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<any, any>>();
-    const route = useRoute();
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'FilmDetail'>>();
+    const route = useRoute<RouteProp<RootStackParamList, 'FilmDetail'>>();
     let { id } = route.params;
 
-    const [vehicles, setVehicles] = useState([] as Vehicle[]);
-    const [starships, setStarships] = useState([] as Starship[]);
-    const [characters, setCharacters] = useState([] as Person[]);
-    const [planets, setPlanets] = useState([] as Planet[]);
+    const [vehicles, setVehicles] = useState([] as Maybe<Vehicle>[]);
+    const [starships, setStarships] = useState([] as Maybe<Starship>[]);
+    const [characters, setCharacters] = useState([] as Maybe<Person>[]);
+    const [planets, setPlanets] = useState([] as Maybe<Planet>[]);
 
     const [film, setFilm] = useState(undefined as unknown as Film);
 
@@ -67,7 +68,7 @@ export const FilmDetail = () => {
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
-            title: data?.film?.title,
+            title: data?.film?.title || '',
             headerStyle: { backgroundColor: 'black' },
             headerTitleStyle: { color: textColor },
         });
@@ -80,10 +81,18 @@ export const FilmDetail = () => {
     }, [data]);
 
     useEffect(() => {
-        setPlanets(film?.planetConnection?.planets);
-        setCharacters(film?.characterConnection?.characters);
-        setVehicles(film?.vehicleConnection?.vehicles);
-        setStarships(film?.starshipConnection?.starships);
+        if (film?.planetConnection?.planets) {
+            setPlanets(film?.planetConnection?.planets);
+        }
+        if (film?.characterConnection?.characters) {
+            setCharacters(film?.characterConnection?.characters);
+        }
+        if (film?.vehicleConnection?.vehicles) {
+            setVehicles(film?.vehicleConnection?.vehicles);
+        }
+        if (film?.starshipConnection?.starships) {
+            setStarships(film?.starshipConnection?.starships);
+        }
     }, [film]);
 
     return (
@@ -98,7 +107,7 @@ export const FilmDetail = () => {
                     <Text style={globalStyles.disclaimerText}>Click on the items below to see more details</Text>
 
                     <LightSaberSeparator />
-                    <PersonMapper data={characters} dataTitle="Characters" />
+                    <PersonMapper data={characters || []} dataTitle="Characters" />
                     <LightSaberSeparator />
                     <PlanetMapper data={planets} />
                     <LightSaberSeparator />

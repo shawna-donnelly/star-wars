@@ -12,21 +12,38 @@ import { ShipsHomeScreen } from '../screens/Ships/ShipsHomeScreen';
 import { StarshipDetail } from '../screens/Ships/StarshipDetail';
 import { VehicleDetail } from '../screens/Ships/VehicleDetail';
 
+export type DetailRouteProp = {
+    id: string;
+};
+
+export type RootStackParamList = {
+    Home: {};
+    PeopleHome: {};
+    PersonDetail: DetailRouteProp;
+    PlanetsHome: {};
+    PlanetDetail: DetailRouteProp;
+    ShipsHome: {};
+    StarshipDetail: DetailRouteProp;
+    VehicleDetail: DetailRouteProp;
+    FilmsHome: {};
+    FilmDetail: DetailRouteProp;
+};
+
 export default function Navigation() {
-    const Stack = createNativeStackNavigator();
+    const RootStack = createNativeStackNavigator<RootStackParamList>();
 
     return (
-        <Stack.Navigator>
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="PeopleHome" component={PeopleHomeScreen} />
-            <Stack.Screen name="PersonDetail" component={PersonDetail} />
-            <Stack.Screen name="PlanetsHome" component={PlanetsHomeScreen} />
-            <Stack.Screen name="PlanetDetail" component={PlanetDetail} />
-            <Stack.Screen name="ShipsHome" component={ShipsHomeScreen} />
-            <Stack.Screen name="StarshipDetail" component={StarshipDetail} />
-            <Stack.Screen name="VehicleDetail" component={VehicleDetail} />
-            <Stack.Screen name="FilmsHome" component={FilmsHomeScreen} />
-            <Stack.Screen name="FilmDetail" component={FilmDetail} />
-        </Stack.Navigator>
+        <RootStack.Navigator>
+            <RootStack.Screen name="Home" component={HomeScreen} />
+            <RootStack.Screen name="PeopleHome" component={PeopleHomeScreen} />
+            <RootStack.Screen name="PersonDetail" component={PersonDetail} />
+            <RootStack.Screen name="PlanetsHome" component={PlanetsHomeScreen} />
+            <RootStack.Screen name="PlanetDetail" component={PlanetDetail} />
+            <RootStack.Screen name="ShipsHome" component={ShipsHomeScreen} />
+            <RootStack.Screen name="StarshipDetail" component={StarshipDetail} />
+            <RootStack.Screen name="VehicleDetail" component={VehicleDetail} />
+            <RootStack.Screen name="FilmsHome" component={FilmsHomeScreen} />
+            <RootStack.Screen name="FilmDetail" component={FilmDetail} />
+        </RootStack.Navigator>
     );
 }

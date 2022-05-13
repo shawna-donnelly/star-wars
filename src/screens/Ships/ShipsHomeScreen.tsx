@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { textColor } from '../Home/HomeScreen';
 import { LightSaberSeparator } from '../../components/LightSaberSeparator';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { globalStyles } from '../../utils/genericStyles';
 
 export const ShipsHomeScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<any, any>>();
@@ -34,23 +35,16 @@ export const ShipsHomeScreen = () => {
     `);
 
     return (
-        <View
-            style={{
-                flex: 1,
-                backgroundColor: 'black',
-            }}
-        >
+        <View style={globalStyles.globalFlatListContainer}>
             {loading && <ActivityIndicator />}
             {data && (
-                <View style={{ flex: 1, backgroundColor: 'black' }}>
+                <View style={globalStyles.globalFlatListContainer}>
                     <FlatList
                         data={data?.allStarships?.edges}
                         renderItem={({ item: edge }) => (
                             <>
                                 <ListItem
-                                    containerStyle={{
-                                        backgroundColor: 'black',
-                                    }}
+                                    containerStyle={globalStyles.globalFlatListContainer}
                                     Component={TouchableHighlight}
                                     key={edge?.node?.id}
                                     onPress={() => navigation.navigate('StarshipDetail', { id: edge?.node?.id })}

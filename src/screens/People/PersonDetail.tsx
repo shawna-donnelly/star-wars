@@ -1,7 +1,7 @@
 import { View, Text, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { Film, Person, Starship, Vehicle } from '../../__generated__/graphql';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { Film, Maybe, Person, Starship, Vehicle } from '../../__generated__/graphql';
 import { gql, useQuery } from '@apollo/client';
 import { textColor } from '../Home/HomeScreen';
 import { LightSaberSeparator } from '../../components/LightSaberSeparator';
@@ -9,15 +9,16 @@ import { DataItem } from '../../components/DataItem';
 import { globalStyles } from '../../utils/genericStyles';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FilmMapper, StarshipMapper, VehicleMapper } from '../../components/Mappers';
+import { RootStackParamList } from '../../navigation/Navigation';
 
 export const PersonDetail = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<any, any>>();
-    const route = useRoute();
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'PersonDetail'>>();
+    const route = useRoute<RouteProp<RootStackParamList, 'PersonDetail'>>();
     let { id } = route.params;
 
-    const [films, setFilms] = useState([] as Film[]);
-    const [vehicles, setVehicles] = useState([] as Vehicle[]);
-    const [starships, setStarships] = useState([] as Starship[]);
+    const [films, setFilms] = useState([] as Maybe<Film>[]);
+    const [vehicles, setVehicles] = useState([] as Maybe<Vehicle>[]);
+    const [starships, setStarships] = useState([] as Maybe<Starship>[]);
     const [person, setPerson] = useState(undefined as unknown as Person);
 
     const { data, loading } = useQuery<{ person: Person }, any>(gql`
@@ -71,9 +72,15 @@ export const PersonDetail = () => {
     }, [data]);
 
     useEffect(() => {
-        setFilms(person?.filmConnection?.films);
-        setVehicles(person?.vehicleConnection?.vehicles);
-        setStarships(person?.starshipConnection?.starships);
+        if (person?.filmConnection?.films) {
+            setFilms(person?.filmConnection?.films);
+        }
+        if (person?.vehicleConnection?.vehicles) {
+            setVehicles(person?.vehicleConnection?.vehicles);
+        }
+        if (person?.starshipConnection?.starships) {
+            setStarships(person?.starshipConnection?.starships);
+        }
     }, [person]);
 
     return (
@@ -83,15 +90,15 @@ export const PersonDetail = () => {
                 <>
                     <View style={globalStyles.generalDataView}>
                         <Text style={globalStyles.boldTitleText}>General Information</Text>
-                        <DataItem title="Name:" value={data.person?.name || ''} />
-                        <DataItem title="Birth Year:" value={data.person?.birthYear || ''} />
-                        <DataItem title="Gender:" value={data.person?.gender || ''} />
-                        <DataItem title="Mass:" value={data.person?.mass?.toString() || ''} />
+                        <DataItem title="Name:" value={person?.name || ''} />
+                        <DataItem title="Birth Year:" value={person?.birthYear || ''} />
+                        <DataItem title="Gender:" value={person?.gender || ''} />
+                        <DataItem title="Mass:" value={person?.mass?.toString() || ''} />
                     </View>
                     <Text style={globalStyles.disclaimerText}>Click on the items below to see more details</Text>
                     <TouchableOpacity
                         style={globalStyles.generalDataView}
-                        onPress={() => navigation.navigate('PlanetDetail', { id: data?.person?.homeworld?.id })}
+                        onPress={() => navigation.navigate('PlanetDetail', { id: person?.homeworld?.id || '' })}
                     >
                         <DataItem title="Homeworld:" value={data.person?.homeworld?.name || ''} />
                     </TouchableOpacity>

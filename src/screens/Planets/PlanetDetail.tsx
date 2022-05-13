@@ -1,7 +1,7 @@
-import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { Film, Person, Planet } from '../../__generated__/graphql';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { Film, Maybe, Person, Planet } from '../../__generated__/graphql';
 import { gql, useQuery } from '@apollo/client';
 import { textColor } from '../Home/HomeScreen';
 import { LightSaberSeparator } from '../../components/LightSaberSeparator';
@@ -9,14 +9,15 @@ import { DataItem } from '../../components/DataItem';
 import { globalStyles } from '../../utils/genericStyles';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FilmMapper, PersonMapper } from '../../components/Mappers';
+import { RootStackParamList } from '../../navigation/Navigation';
 
 export const PlanetDetail = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<any, any>>();
-    const route = useRoute();
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'PlanetDetail'>>();
+    const route = useRoute<RouteProp<RootStackParamList, 'PlanetDetail'>>();
     let { id } = route.params;
 
-    const [films, setFilms] = useState([] as Film[]);
-    const [residents, setResidents] = useState([] as Person[]);
+    const [films, setFilms] = useState([] as Maybe<Film>[]);
+    const [residents, setResidents] = useState([] as Maybe<Person>[]);
 
     const [planet, setPlanet] = useState(undefined as unknown as Planet);
 
@@ -45,7 +46,7 @@ export const PlanetDetail = () => {
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
-            title: data?.planet?.name,
+            title: data?.planet?.name || '',
             headerStyle: { backgroundColor: 'black' },
             headerTitleStyle: { color: textColor },
         });
@@ -58,8 +59,12 @@ export const PlanetDetail = () => {
     }, [data]);
 
     useEffect(() => {
-        setFilms(planet?.filmConnection?.films);
-        setResidents(planet?.residentConnection?.residents);
+        if (planet?.filmConnection?.films) {
+            setFilms(planet?.filmConnection?.films);
+        }
+        if (planet?.residentConnection?.residents) {
+            setResidents(planet?.residentConnection?.residents);
+        }
     }, [planet]);
 
     return (
@@ -86,7 +91,3 @@ export const PlanetDetail = () => {
         </ScrollView>
     );
 };
-
-const styles = StyleSheet.create({
-    titleText: { color: textColor, margin: 5, fontSize: 16 },
-});

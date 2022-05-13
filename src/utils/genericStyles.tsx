@@ -24,4 +24,8 @@ export const globalStyles = StyleSheet.create({
         fontWeight: 'bold',
     },
     disclaimerText: { fontSize: 10, color: textColor, fontStyle: 'italic', fontWeight: '300' },
+    globalFlatListContainer: {
+        flex: 1,
+        backgroundColor: 'black',
+    },
 });
