@@ -9,6 +9,8 @@ export const globalStyles = StyleSheet.create({
     },
     globalScrollViewContent: {
         paddingBottom: '5%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     generalDataView: {
         flexShrink: 1,
